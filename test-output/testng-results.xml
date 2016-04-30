@@ -1,57 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="4" passed="4">
+<testng-results skipped="0" failed="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="4923" started-at="2016-04-29T02:23:20Z" finished-at="2016-04-29T02:23:25Z">
+  <suite name="Default suite" duration-ms="7265" started-at="2016-04-30T22:03:58Z" finished-at="2016-04-30T22:04:05Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="4923" started-at="2016-04-29T02:23:20Z" finished-at="2016-04-29T02:23:25Z">
-      <class name="com.sqa.mz.util.helpers.BasicAutomationTest">
-        <test-method status="PASS" signature="loadProperties()[pri:0, instance:com.sqa.mz.util.helpers.BasicAutomationTest@7bb613c0]" name="loadProperties" is-config="true" duration-ms="9" started-at="2016-04-28T19:23:20Z" finished-at="2016-04-28T19:23:20Z">
+    <test name="Default test" duration-ms="7265" started-at="2016-04-30T22:03:58Z" finished-at="2016-04-30T22:04:05Z">
+      <class name="com.sqa.mz.adactin.LoginTest">
+        <test-method status="PASS" signature="loadProperties()[pri:0, instance:com.sqa.mz.adactin.LoginTest@27beded]" name="loadProperties" is-config="true" duration-ms="9" started-at="2016-04-30T15:03:58Z" finished-at="2016-04-30T15:03:58Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- loadProperties -->
-        <test-method status="PASS" signature="test(java.lang.Integer, java.lang.String)[pri:0, instance:com.sqa.mz.util.helpers.BasicAutomationTest@7bb613c0]" name="test" duration-ms="5" started-at="2016-04-28T19:23:20Z" data-provider="dp" finished-at="2016-04-28T19:23:20Z">
+        <test-method status="PASS" signature="setupFirefox()[pri:0, instance:com.sqa.mz.adactin.LoginTest@27beded]" name="setupFirefox" is-config="true" duration-ms="2247" started-at="2016-04-30T15:03:58Z" depends-on-methods="com.sqa.mz.adactin.LoginTest.loadProperties" finished-at="2016-04-30T15:04:00Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupFirefox -->
+        <test-method status="PASS" signature="testCheckOut(java.lang.String, java.lang.String)[pri:0, instance:com.sqa.mz.adactin.LoginTest@27beded]" name="testCheckOut" duration-ms="4992" started-at="2016-04-30T15:04:00Z" data-provider="UserAccountInfo" finished-at="2016-04-30T15:04:05Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[1]]>
+                <![CDATA[michaeltest]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[a]]>
+                <![CDATA[qqqqqq]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- test -->
-        <test-method status="PASS" signature="test(java.lang.Integer, java.lang.String)[pri:0, instance:com.sqa.mz.util.helpers.BasicAutomationTest@7bb613c0]" name="test" duration-ms="2" started-at="2016-04-28T19:23:20Z" data-provider="dp" finished-at="2016-04-28T19:23:20Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[2]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[b]]>
-              </value>
-            </param>
-          </params>
+        </test-method> <!-- testCheckOut -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.sqa.mz.adactin.LoginTest@27beded]" name="tearDown" is-config="true" duration-ms="1" started-at="2016-04-30T15:04:05Z" finished-at="2016-04-30T15:04:05Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- test -->
-        <test-method status="PASS" signature="testLogin()[pri:0, instance:com.sqa.mz.util.helpers.BasicAutomationTest@7bb613c0]" name="testLogin" duration-ms="3" started-at="2016-04-28T19:23:20Z" finished-at="2016-04-28T19:23:20Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testLogin -->
-        <test-method status="PASS" signature="setUpLogin()[pri:0, instance:com.sqa.mz.util.helpers.BasicAutomationTest@7bb613c0]" name="setUpLogin" duration-ms="4874" started-at="2016-04-28T19:23:20Z" finished-at="2016-04-28T19:23:25Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- setUpLogin -->
-      </class> <!-- com.sqa.mz.util.helpers.BasicAutomationTest -->
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.sqa.mz.adactin.LoginTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
