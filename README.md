@@ -1,6 +1,11 @@
-### basic-auto-project Project
+### adactin-project
 
-## April, 20 2016
+## April, 30 2016
+
+* Git
+* Java 7
+* Maven
+* TestNG
 
 
 
