@@ -1,20 +1,27 @@
 package com.sqa.mz.gmail;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.fail;
 
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.*;
-import org.openqa.selenium.firefox.*;
-import org.openqa.selenium.safari.*;
-import org.testng.annotations.*;
+import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 public class BasicAutoTest {
 
 	private static String baseUrl;
 	private static StringBuffer verificationErrors = new StringBuffer();
 	static WebDriver driver;
+
+	static Logger logger = Logger.getLogger(BasicAutoTest.class);
 
 	@BeforeClass(enabled = false, groups = "chrome")
 	public static void setUpChrome() throws Exception {
@@ -78,6 +85,14 @@ public class BasicAutoTest {
 		this.driver.findElement(By.cssSelector("span.gb_2a.gbii"));
 		this.driver.findElement(By.id("gb_71"));
 		System.out.println("User " + username + " is logged out");
+		logger.info("My information");
+		for (int i = 0; i < 1000; i++) {
+			logger.debug("Debug message " + i);
+			if (i % 12 == 0) {
+				logger.fatal("Fatal message " + i);
+			}
+
+		}
 
 	}
 

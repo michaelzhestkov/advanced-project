@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.sqa.mz.util.helpers.BasicAutomationTest">
+      <class name="com.sqa.mz.gmail.BasicAutoTest">
         <methods>
-          <include name="testLogin"/>
-          <include name="loadProperties"/>
-          <include name="test"/>
+          <include name="setUpFirefox"/>
+          <include name="test" invocation-numbers="1"/>
+          <include name="tearDown"/>
         </methods>
-      </class> <!-- com.sqa.mz.util.helpers.BasicAutomationTest -->
+      </class> <!-- com.sqa.mz.gmail.BasicAutoTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
