@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io/api/java,eclipse,intellij,maven,osx,xcode,sublimetext
 
+# Selenium #
+test-output/
+
 ### Java ###
 *.class
 

@@ -1,6 +1,5 @@
 package com.sqa.mz.adactin;
 
-import java.text.*;
 import java.util.*;
 import java.util.NoSuchElementException;
 
@@ -15,8 +14,6 @@ import org.testng.annotations.*;
 import com.sqa.mz.util.helpers.*;
 
 public class LoginTest {
-
-	private static String baseURL = "http://adactin.com/HotelApp/index.php";
 
 	private static Properties devProps;
 
@@ -54,7 +51,7 @@ public class LoginTest {
 	@BeforeClass(enabled = true, groups = "firefox", dependsOnMethods = "loadProperties")
 	public static void setupFirefox() throws InterruptedException {
 		driver = new FirefoxDriver();
-		// driver.get(devProps.getProperty("baseURL2"));
+		driver.get(devProps.getProperty("baseURL2"));
 		// Thread.sleep(1000);
 	}
 
@@ -73,15 +70,14 @@ public class LoginTest {
 		Thread.sleep(1000);
 	}
 
-	private String message = "Successful login";
+	private String succesfullLoginMessage = "Success: Login successfully";
+	private String unsuccesfullLoginMessage = "Success: Login failed with invalid credentials";
 
 	String actualSignIn;
 
 	By loginButtonLocator = By.cssSelector("#login");
-
 	By passwordLocator = By.cssSelector("#password");
 	By successfulLoginLocator = By.cssSelector("#username_show");
-
 	By usernameLocator = By.cssSelector("#username");
 
 	@BeforeClass
@@ -93,74 +89,50 @@ public class LoginTest {
 	@AfterClass
 	public void tearDown() {
 
-		// driver.quit();
+		driver.quit();
 	}
 
-	@Test(dataProvider = "UserAccountInfo", priority = 1)
-	public void testCheckOut(String username, String password) {
-		System.out.println("Check-Out Test: Username-" + username + "/Password-" + password);
-		driver.get(devProps.getProperty("baseURL2"));
-		enterCredentialsAndLogIn(username, password);
-		clickSignInBtn();
-		selectElements();
-		enterInvalidCheckIn();
-
-	}
-
-	@Test(dataProvider = "UserAccountInfo", priority = 1, enabled = false)
+	@Test(dataProvider = "UserAccountInfo", priority = 1, enabled = true)
 	public void testLogin(String username, String password) {
 		System.out.println("Basic Test: Username-" + username + "/Password-" + password);
 		driver.get(devProps.getProperty("baseURL2"));
 		enterCredentialsAndLogIn(username, password);
 		clickSignInBtn();
+		successfulLogin();
 
 	}
 
-	@Test(dataProvider = "UserAccountInfo", priority = 2, enabled = false)
+	@Test(dataProvider = "UserAccountInfo", priority = 2, enabled = true)
 	public void testLogin2(String username, String password) {
 		System.out.println("Basic Test 2: Username-" + username + "/Password-" + password);
 		driver.get(devProps.getProperty("baseURL1"));
 		enterCredentialsAndLogIn(username, password);
 		clickSignInBtn();
+		successfulLogin();
+
+	}
+
+	@Test(dataProvider = "UserAccountInfo", priority = 3, enabled = true)
+	public void testLoginInvalidUsername(String username, String password) {
+		System.out.println(
+				"Basic Test 2: Username-" + devProps.getProperty("invalidUsaername") + "/Password-" + password);
+		driver.get(devProps.getProperty("baseURL1"));
+		enterCredentialsAndLogIn(devProps.getProperty("invalidUsaername"), password);
+		clickSignInBtn();
+		unsuccessfulLogin();
 
 	}
 
 	private void clickSignInBtn() {
 		driver.findElement(this.loginButtonLocator).click();
-		Assert.assertTrue(isElementPresent(By.id("username_show")), this.message);
-		System.out.println(this.message);
+		// Assert.assertTrue(isElementPresent(By.id("username_show")),
+		// this.message);
+		// System.out.println(this.message);
 	}
 
 	private void enterCredentialsAndLogIn(String username, String password) {
 		driver.findElement(this.usernameLocator).sendKeys(username);
 		driver.findElement(this.passwordLocator).sendKeys(password);
-
-	}
-
-	private void enterInvalidCheckIn() {
-		SimpleDateFormat todayPlus7 = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date()); // Now use today date.
-		c.add(Calendar.DATE, 7); // Adding 7 days
-		String todayPlusSeven = todayPlus7.format(c.getTime());
-		// System.out.println(todayPlusSeven);
-
-		driver.findElement(By.cssSelector("#datepick_in")).clear();
-		driver.findElement(By.cssSelector("#datepick_in")).sendKeys(todayPlusSeven);
-
-		SimpleDateFormat today = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar c1 = Calendar.getInstance();
-		c.setTime(new Date()); // Now use today date.
-		String dayToday = today.format(c1.getTime());
-		// System.out.println(dayToday);
-
-		driver.findElement(By.cssSelector("#datepick_out")).clear();
-		driver.findElement(By.cssSelector("#datepick_out")).sendKeys(dayToday);
-
-		driver.findElement(By.cssSelector("#Submit")).click();
-
-		Assert.assertEquals("Check-In Date shall be before than Check-Out Date",
-				driver.findElement(By.cssSelector("#checkin_span")).getText());
 
 	}
 
@@ -173,11 +145,15 @@ public class LoginTest {
 		}
 	}
 
-	private void selectElements() {
-		driver.findElement(By.cssSelector("#location > option:nth-of-type(2)")).click();
-		driver.findElement(By.cssSelector("#hotels > option:nth-of-type(2)")).click();
-		driver.findElement(By.cssSelector("#room_type > option:nth-of-type(2)")).click();
-		driver.findElement(By.cssSelector("#room_nos > option:nth-of-type(2)")).click();
+	private void successfulLogin() {
+		Assert.assertTrue(isElementPresent(By.id("username_show")), this.succesfullLoginMessage);
+		System.out.println(this.succesfullLoginMessage);
+
+	}
+
+	private void unsuccessfulLogin() {
+		Assert.assertTrue(isElementPresent(By.cssSelector(".auth_error>b")), this.unsuccesfullLoginMessage);
+		System.out.println(this.unsuccesfullLoginMessage);
 
 	}
 
