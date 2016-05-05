@@ -19,9 +19,11 @@ import org.openqa.selenium.chrome.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.opera.*;
 import org.openqa.selenium.safari.*;
+import org.openqa.selenium.support.ui.*;
 import org.testng.*;
 import org.testng.annotations.*;
 
+import com.sqa.mz.pageobjects.*;
 import com.sqa.mz.util.helpers.*;
 
 public class SearchTest {
@@ -81,21 +83,28 @@ public class SearchTest {
 		Thread.sleep(1000);
 	}
 
-	private String message = "Successful login";
+	private String invalidCheckInCheckOutRangeMessage = "Success: Proper message is present, Enter valid range";
 
-	String actualSignIn;
+	private String invalidCheckInMessage = "Success: Proper message is present";
 
+	private Select locationSelect;
+
+	private Search search;
+
+	private String succesfullLoginMessage = "Success: Login successfully";
 	By checkInDateField = By.cssSelector("#datepick_in");
 	By checkInMessageLocator = By.cssSelector("#checkin_span");
 	By checkOutDateField = By.cssSelector("#datepick_out");
-	By hotelsField = By.cssSelector("#hotels > option:nth-of-type(2)");
-	By locationField = By.cssSelector("#location > option:nth-of-type(2)");
+	By hotelsField = By.cssSelector("#hotels");
+	By invalidCheckInCheckOutRangeLocator = By.cssSelector("#checkin_span");
+	By locationField = By.cssSelector("#location");
 	By loginButtonLocator = By.cssSelector("#login");
-	By numberOfRoomsField = By.cssSelector("#room_nos > option:nth-of-type(2)");
+	By numberOfRoomsField = By.cssSelector("#room_nos");
 	By passwordField = By.cssSelector("#password");
-	By roomTypeField = By.cssSelector("#room_type > option:nth-of-type(2)");
+	By roomTypeField = By.cssSelector("#room_type");
 	By submitButtonLocator = By.cssSelector("#Submit");
 	By successfulLoginLocator = By.cssSelector("#username_show");
+
 	By usernameField = By.cssSelector("#username");
 
 	@BeforeClass
@@ -112,49 +121,121 @@ public class SearchTest {
 
 	@Test(dataProvider = "UserAccountInfo", priority = 1)
 	public void testCheckOut(String username, String password) {
-		System.out.println("Check-Out Test: Username-" + username + "/Password-" + password);
+		System.out.println("Check-Out Test with baseURL2: Username-" + username + "/Password-" + password);
 		driver.get(devProps.getProperty("baseURL2"));
 		enterCredentialsAndLogIn(username, password);
 		clickSignInBtn();
 		selectElementsOnSearchPage();
-		enterInvalidCheckIn();
+		enterCheckIn(7);
+		enterCheckOut(0);
+		driver.findElement(this.submitButtonLocator).click();
+		assertCheckOutdateErrorMessage();
 
+	}
+
+	@Test(dataProvider = "UserAccountInfo", priority = 2)
+	public void testCheckOut2(String username, String password) {
+		System.out.println("Check-Out Test baseURL1: Username-" + username + "/Password-" + password);
+		driver.get(devProps.getProperty("baseURL1"));
+		enterCredentialsAndLogIn(username, password);
+		clickSignInBtn();
+		selectElementsOnSearchPage();
+		enterCheckIn(7);
+		enterCheckOut(0);
+		driver.findElement(this.submitButtonLocator).click();
+		assertCheckOutdateErrorMessage();
+
+	}
+
+	@Test(dataProvider = "UserAccountInfo", priority = 3)
+	public void testCheckOutCheckInInvalidRange(String username, String password) {
+		System.out.println("Check-Out Test with baseURL2: Username-" + username + "/Password-" + password);
+		driver.get(devProps.getProperty("baseURL2"));
+		enterCredentialsAndLogIn(username, password);
+		clickSignInBtn();
+		selectElementsOnSearchPage();
+		// enterCheckIn(-5);
+		// enterCheckOut(-3);
+		// new Search().enterCheckInCheckOutDays(-3, -5);
+		this.search.enterCheckInCheckOutDays(-3, -5);
+
+		driver.findElement(this.submitButtonLocator).click();
+		assertCheckOutCheckInValidRangeMessage();
+
+	}
+
+	private void assertCheckOutCheckInValidRangeMessage() {
+		Assert.assertEquals("Check-In Date should be either Today or Later Date",
+				driver.findElement(this.invalidCheckInCheckOutRangeLocator).getText(),
+				this.invalidCheckInCheckOutRangeMessage);
+		System.out.println(this.invalidCheckInCheckOutRangeMessage);
+
+	}
+
+	private void assertCheckOutdateErrorMessage() {
+		Assert.assertEquals("Check-In Date shall be before than Check-Out Date",
+				driver.findElement(this.checkInMessageLocator).getText(), this.invalidCheckInMessage);
+		System.out.println(this.invalidCheckInMessage);
 	}
 
 	private void clickSignInBtn() {
 		driver.findElement(this.loginButtonLocator).click();
-		Assert.assertTrue(isElementPresent(By.id("username_show")), this.message);
-		System.out.println(this.message);
+		Assert.assertTrue(isElementPresent(By.id("username_show")), this.succesfullLoginMessage);
+		System.out.println(this.succesfullLoginMessage);
+	}
+
+	// private void enterCheckIn() {
+	// SimpleDateFormat checkIn = new SimpleDateFormat("dd/MM/yyyy");
+	// Calendar c = Calendar.getInstance();
+	// c.setTime(new Date()); // Now use today date.
+	// String dayToday = checkIn.format(c.getTime());
+	// System.out.println(dayToday);
+	// driver.findElement(this.checkInDateField).clear();
+	// driver.findElement(this.checkInDateField).sendKeys(dayToday);
+	//
+	// }
+
+	private int enterCheckIn(int daysFromToday) {
+		SimpleDateFormat checkIn = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date()); // Now use today date.
+		c.add(Calendar.DATE, daysFromToday);
+		String dayToday = checkIn.format(c.getTime());
+		System.out.println(dayToday);
+		driver.findElement(this.checkInDateField).clear();
+		driver.findElement(this.checkInDateField).sendKeys(dayToday);
+		return daysFromToday;
+
+	}
+
+	// private void enterCheckOut() {
+	// SimpleDateFormat checkOut = new SimpleDateFormat("dd/MM/yyyy");
+	// Calendar c = Calendar.getInstance();
+	// c.setTime(new Date()); // Now use today date.
+	// String dayToday = checkOut.format(c.getTime());
+	// System.out.println(dayToday);
+	// driver.findElement(this.checkOutDateField).clear();
+	// driver.findElement(this.checkOutDateField).sendKeys(dayToday);
+	// // OR
+	// // enterCheckOut(0);
+	// }
+
+	private String enterCheckOut(int daysFromToday) {
+		SimpleDateFormat checkOut = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date()); // Now use today date.
+		c.add(Calendar.DATE, daysFromToday);
+		String dayToday = checkOut.format(c.getTime());
+		System.out.println(dayToday);
+		driver.findElement(this.checkOutDateField).clear();
+		driver.findElement(this.checkOutDateField).sendKeys(dayToday);
+		return dayToday;
+
 	}
 
 	private void enterCredentialsAndLogIn(String username, String password) {
 		driver.findElement(this.usernameField).sendKeys(username);
 		driver.findElement(this.passwordField).sendKeys(password);
-
-	}
-
-	private void enterInvalidCheckIn() {
-		SimpleDateFormat checkIn = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat checkOut = new SimpleDateFormat("dd/MM/yyyy");
-		Calendar c = Calendar.getInstance();
-		Calendar c1 = Calendar.getInstance();
-		c.setTime(new Date()); // Now use today date.
-		String dayToday = checkOut.format(c1.getTime());
-		c.add(Calendar.DATE, 7); // Adding 7 days
-		String todayPlusSeven = checkIn.format(c.getTime());
-		System.out.println(dayToday);
-		System.out.println(todayPlusSeven);
-
-		driver.findElement(this.checkInDateField).clear();
-		driver.findElement(this.checkInDateField).sendKeys(todayPlusSeven);
-
-		driver.findElement(this.checkOutDateField).clear();
-		driver.findElement(this.checkOutDateField).sendKeys(dayToday);
-
-		driver.findElement(this.submitButtonLocator).click();
-
-		Assert.assertEquals("Check-In Date shall be before than Check-Out Date",
-				driver.findElement(this.checkInMessageLocator).getText());
 
 	}
 
@@ -168,11 +249,17 @@ public class SearchTest {
 	}
 
 	private void selectElementsOnSearchPage() {
-		driver.findElement(this.locationField).click();
-		driver.findElement(this.hotelsField).click();
-		driver.findElement(this.roomTypeField).click();
-		driver.findElement(this.numberOfRoomsField).click();
+		selectOption(this.locationField, "Sydney");
+		selectOption(this.hotelsField, "Hotel Creek");
+		selectOption(this.roomTypeField, "Standard");
+		selectOption(this.numberOfRoomsField, "1");
 
+	}
+
+	private void selectOption(By locator, String value) {
+		Select fieldSelect = new Select(driver.findElement(locator));
+		System.out.println("Possible " + fieldSelect.getOptions());
+		fieldSelect.selectByValue(value);
 	}
 
 }

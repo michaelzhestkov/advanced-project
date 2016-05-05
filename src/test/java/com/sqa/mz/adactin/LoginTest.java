@@ -125,9 +125,7 @@ public class LoginTest {
 
 	private void clickSignInBtn() {
 		driver.findElement(this.loginButtonLocator).click();
-		// Assert.assertTrue(isElementPresent(By.id("username_show")),
-		// this.message);
-		// System.out.println(this.message);
+
 	}
 
 	private void enterCredentialsAndLogIn(String username, String password) {
