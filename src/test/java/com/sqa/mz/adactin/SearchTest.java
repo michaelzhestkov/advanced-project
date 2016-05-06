@@ -126,8 +126,8 @@ public class SearchTest {
 		enterCredentialsAndLogIn(username, password);
 		clickSignInBtn();
 		selectElementsOnSearchPage();
-		enterCheckIn(7);
-		enterCheckOut(0);
+		enterCheckIn(0);
+		enterCheckOut(2);
 		driver.findElement(this.submitButtonLocator).click();
 		assertCheckOutdateErrorMessage();
 

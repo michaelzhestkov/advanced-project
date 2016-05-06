@@ -7,17 +7,6 @@ import org.openqa.selenium.support.ui.*;
 
 import com.sqa.mz.util.helpers.*;
 
-/**
- * SearchPage //ADDD (description of class)
- * <p>
- * //ADDD (description of core fields)
- * <p>
- * //ADDD (description of core methods)
- *
- * @author Nepton, Jean-francois
- * @version 1.0.0
- * @since 1.0
- */
 public class SearchPage extends DefaultPage {
 
 	@FindBy(id = "adult_room")
@@ -36,7 +25,7 @@ public class SearchPage extends DefaultPage {
 	private WebElement errorMEsCheckOut;
 
 	@FindBy(id = "checkin_span")
-	private WebElement errorMesChekIn;
+	private WebElement errorMesCheckIn;
 
 	@FindBy(id = "hotels")
 	private WebElement hotels;
@@ -77,6 +66,18 @@ public class SearchPage extends DefaultPage {
 		PageFactory.initElements(getDriver(), this);
 	}
 
+	public SearchPage chooseCheckInDate(String date) {
+		this.checkIn.clear();
+		this.checkIn.sendKeys(date);
+		return this;
+	}
+
+	public SearchPage chooseCheckOutDate(String date) {
+		this.checkOut.clear();
+		this.checkOut.sendKeys(date);
+		return this;
+	}
+
 	public SearchPage chooseHotel(String hotelChoice) {
 		Select selectHotels = new Select(this.hotels);
 		selectHotels.selectByValue(hotelChoice);
@@ -89,9 +90,15 @@ public class SearchPage extends DefaultPage {
 		return this;
 	}
 
-	public SearchPage chooseNumOfChildren(String numOfChildren) {
-		Select selectNumOfChildren = new Select(this.childPerRoom);
-		selectNumOfChildren.selectByValue(numOfChildren);
+	public SearchPage chooseNumAdultsInRoom(String numInRoom) {
+		Select selectAdultsPerRoom = new Select(this.adultsPerRoom);
+		selectAdultsPerRoom.selectByValue(numInRoom);
+		return this;
+	}
+
+	public SearchPage chooseNumChildrenInRoom(String numInRoom) {
+		Select selectChildrenPerRoom = new Select(this.childPerRoom);
+		selectChildrenPerRoom.selectByValue(numInRoom);
 		return this;
 	}
 
@@ -107,8 +114,60 @@ public class SearchPage extends DefaultPage {
 		return this;
 	}
 
+	public String getCheckInErrorMessage() {
+		if (hasCheckInErrorMessage()) {
+			return this.errorMesCheckIn.getText();
+		} else {
+			return "";
+		}
+	}
+
+	public String getCheckOutErrorMessage() {
+		if (hasCheckOutErrorMessage()) {
+			return this.errorMEsCheckOut.getText();
+		} else {
+			return "";
+		}
+	}
+
+	public boolean hasCheckInErrorMessage() {
+		boolean hasMessage = false;
+		hasMessage = AutoBasics.isElementPresent(getDriver(), By.id("checkin_span"));
+		if (hasMessage) {
+			if (this.errorMesCheckIn.getText().length() > 1) {
+				hasMessage = true;
+				System.out.println("Message: " + this.errorMesCheckIn.getText());
+			}
+		}
+		return hasMessage;
+	}
+
+	public boolean hasCheckOutErrorMessage() {
+		boolean hasMessage = false;
+		hasMessage = AutoBasics.isElementPresent(getDriver(), By.id("checkout_span"));
+		if (hasMessage) {
+			if (this.errorMesCheckIn.getText().length() > 1) {
+				hasMessage = true;
+				System.out.println("Message: " + this.errorMesCheckIn.getText());
+			}
+		}
+		return hasMessage;
+	}
+
 	public boolean hasWelcomeMsg() {
 		// System.out.println("Driver:" + getDriver());
 		return AutoBasics.isElementPresent(getDriver(), By.cssSelector("td.welcome_menu"));
+	}
+
+	public SearchPage reset() {
+		this.resetBtn.click();
+		return this;
+
+	}
+
+	public SearchPage submit() {
+		this.submitBtn.click();
+		return this;
+
 	}
 }

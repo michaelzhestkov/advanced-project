@@ -1,6 +1,9 @@
 
 package com.sqa.mz.adactin;
 
+import java.text.*;
+import java.util.*;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.*;
@@ -10,11 +13,23 @@ import com.sqa.mz.adactin.exceptions.*;
 
 public class DefaultPage extends PageFactory {
 
-	private static String baseURL;
+	private static String baseURL = "http://adactin.com/HotelAppBuild2";
 
 	private static WebDriver driver;
 
 	private static Logger logger;
+
+	public static String changeDate(String date, int days) throws ParseException {
+		String newDate;
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat df = DateFormat.getDateInstance();
+		Calendar calendar = Calendar.getInstance();
+		Date inputDate = dateFormat.parse(date);
+		calendar.setTime(inputDate);
+		calendar.add(Calendar.DATE, days);
+		newDate = dateFormat.format(calendar.getTime());
+		return newDate;
+	}
 
 	/**
 	 * @return the baseURL
